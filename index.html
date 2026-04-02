@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>2026年武汉联通合作伙伴大会</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 页面容器 -->
+    <div id="app">
+        <!-- 页面1: 封面页 -->
+        <div class="page" id="page-cover">
+            <div class="cover-content">
+                <div class="logo-section">
+                    <div class="unicom-logo">
+                        <svg viewBox="0 0 120 40" class="logo-svg">
+                            <rect x="5" y="8" width="24" height="24" rx="4" fill="#e60012"/>
+                            <text x="17" y="26" text-anchor="middle" fill="white" font-size="14" font-weight="bold">C</text>
+                            <text x="38" y="26" fill="#e60012" font-size="16" font-weight="bold">中国联通</text>
+                        </svg>
+                    </div>
+                    <h1 class="event-title">2026年武汉联通<br>合作伙伴大会</h1>
+                </div>
+                <div class="event-info">
+                    <p class="info-text">
+                        <span class="icon">📅</span>
+                        活动时间：2026年4月20日
+                    </p>
+                    <p class="info-text">
+                        <span class="icon">📍</span>
+                        活动地点：武汉会议中心黄鹤厅
+                    </p>
+                </div>
+                <div class="action-section">
+                    <div class="swipe-hint">
+                        <div class="swipe-arrow">↑</div>
+                        <span>上滑进入活动</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cover-bg">
+                <div class="gradient-orb orb-1"></div>
+                <div class="gradient-orb orb-2"></div>
+                <div class="gradient-orb orb-3"></div>
+            </div>
+        </div>
+
+        <!-- 页面2: 活动预约登记 -->
+        <div class="page" id="page-register">
+            <div class="header">
+                <div class="header-logo">
+                    <svg viewBox="0 0 100 32" class="logo-small">
+                        <rect x="2" y="6" width="20" height="20" rx="3" fill="#e60012"/>
+                        <text x="12" y="21" text-anchor="middle" fill="white" font-size="12" font-weight="bold">C</text>
+                    </svg>
+                </div>
+                <div class="header-title">
+                    <div class="title-main">2026武汉联通合作伙伴大会</div>
+                    <div class="title-sub">活动预约登记</div>
+                </div>
+            </div>
+            <div class="register-content">
+                <form id="registerForm" class="card-form">
+                    <div class="form-card">
+                        <label class="form-label">姓名</label>
+                        <input type="text" class="form-input" id="regName" placeholder="请输入您的姓名">
+                        <span class="error-msg" id="error-name">*请填写预约信息</span>
+                    </div>
+                    <div class="form-card">
+                        <label class="form-label">联系方式</label>
+                        <input type="tel" class="form-input" id="regPhone" placeholder="请输入手机号码">
+                        <span class="error-msg" id="error-phone">*请填写预约信息</span>
+                    </div>
+                    <div class="form-card">
+                        <label class="form-label">代表单位</label>
+                        <input type="text" class="form-input" id="regCompany" placeholder="请输入单位名称">
+                        <span class="error-msg" id="error-company">*请填写预约信息</span>
+                    </div>
+                    <div class="form-card">
+                        <label class="form-label">所在行业</label>
+                        <input type="text" class="form-input" id="regIndustry" placeholder="请输入所在行业">
+                        <span class="error-msg" id="error-industry">*请填写预约信息</span>
+                    </div>
+                    <div class="form-card">
+                        <label class="form-label">同行参会人数</label>
+                        <input type="number" class="form-input" id="regGuests" placeholder="请输入人数" min="0">
+                        <span class="error-msg" id="error-guests">*请填写预约信息</span>
+                    </div>
+                </form>
+                <button type="button" class="btn-primary btn-submit" onclick="app.submitRegistration()">
+                    <span>提交</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 页面3: 活动内容详情（导航中心） -->
+        <div class="page" id="page-home">
+            <div class="header">
+                <div class="header-logo">
+                    <svg viewBox="0 0 100 32" class="logo-small">
+                        <rect x="2" y="6" width="20" height="20" rx="3" fill="#e60012"/>
+                        <text x="12" y="21" text-anchor="middle" fill="white" font-size="12" font-weight="bold">C</text>
+                    </svg>
+                </div>
+                <div class="header-title single">2026武汉联通合作伙伴大会</div>
+            </div>
+            <div class="home-content">
+                <div class="nav-grid">
+                    <div class="nav-card" onclick="app.navigateTo('venue')">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 48 48">
+                                <path d="M24 4L4 14v20h16v-12h8v12h16V14L24 4z" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <rect x="20" y="22" width="8" height="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="nav-text">活动场地与流程</div>
+                    </div>
+                    <div class="nav-card" onclick="app.navigateTo('seating')">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 48 48">
+                                <rect x="6" y="8" width="36" height="32" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <line x1="6" y1="18" x2="42" y2="18" stroke="currentColor" stroke-width="2"/>
+                                <line x1="6" y1="28" x2="42" y2="28" stroke="currentColor" stroke-width="2"/>
+                                <line x1="18" y1="8" x2="18" y2="40" stroke="currentColor" stroke-width="2"/>
+                                <line x1="30" y1="8" x2="30" y2="40" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="nav-text">活动座位分区</div>
+                    </div>
+                    <div class="nav-card" onclick="app.navigateTo('projects')">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 48 48">
+                                <path d="M24 4l-4 8h8l-4-8z" fill="currentColor"/>
+                                <rect x="8" y="14" width="32" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <line x1="8" y1="22" x2="40" y2="22" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="16" cy="30" r="3" fill="currentColor"/>
+                                <line x1="24" y1="28" x2="36" y2="28" stroke="currentColor" stroke-width="2"/>
+                                <line x1="24" y1="34" x2="32" y2="34" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="nav-text">合作项目跟进</div>
+                    </div>
+                    <div class="nav-card" onclick="app.navigateTo('review')">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 48 48">
+                                <polygon points="24,4 29,18 44,18 32,28 36,42 24,34 12,42 16,28 4,18 19,18" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="nav-text">活动评价</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面4: 活动场地与流程 -->
+        <div class="page" id="page-venue">
+            <div class="page-header">
+                <button class="btn-back" onclick="app.goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <div class="page-title">活动场地与流程</div>
+                <div class="placeholder"></div>
+            </div>
+            <div class="page-content scrollable">
+                <!-- 场地信息 -->
+                <div class="section">
+                    <div class="section-title">场地信息</div>
+                    <div class="venue-info-card">
+                        <div class="venue-name">武汉会议中心黄鹤厅</div>
+                        <div class="venue-actions">
+                            <div class="venue-btn" onclick="app.showModal('route')">
+                                <div class="btn-icon">🗺️</div>
+                                <div class="btn-text">参会路线图</div>
+                            </div>
+                            <div class="venue-btn" onclick="app.showModal('layout')">
+                                <div class="btn-icon">🏛️</div>
+                                <div class="btn-text">会场布局图</div>
+                            </div>
+                            <div class="venue-btn" onclick="app.showModal('address')">
+                                <div class="btn-icon">📍</div>
+                                <div class="btn-text">会场详细地址</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 活动流程 -->
+                <div class="section">
+                    <div class="section-title">活动流程</div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-time">9:00</div>
+                            <div class="timeline-icon">📝</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">入场签到</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">9:25</div>
+                            <div class="timeline-icon">🎬</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">活动开场</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">9:30</div>
+                            <div class="timeline-icon">🎤</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">领导致辞</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">9:45</div>
+                            <div class="timeline-icon">💼</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">嘉宾发言</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">10:00</div>
+                            <div class="timeline-icon">📊</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">品牌推介</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">10:30</div>
+                            <div class="timeline-icon">✍️</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">签约仪式</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">10:45</div>
+                            <div class="timeline-icon">📸</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">合影环节</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-time">11:00</div>
+                            <div class="timeline-icon">🏁</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">活动结束</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面5: 活动座位分区 -->
+        <div class="page" id="page-seating">
+            <div class="page-header">
+                <button class="btn-back" onclick="app.goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <div class="page-title">活动座位分区</div>
+                <div class="placeholder"></div>
+            </div>
+            <div class="page-content scrollable">
+                <div class="section">
+                    <div class="section-title">座位分布图</div>
+                    <div class="seat-map-container">
+                        <div class="seat-map">
+                            <div class="stage">舞台</div>
+                            <div class="seat-zones">
+                                <div class="zone zone-a">A区</div>
+                                <div class="zone zone-b">B区</div>
+                                <div class="zone zone-c">C区</div>
+                                <div class="zone zone-d">D区</div>
+                            </div>
+                            <div class="entrance">入口</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">展位列表</div>
+                    <div class="booth-list" id="boothList">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面6: 合作项目跟进 -->
+        <div class="page" id="page-projects">
+            <div class="page-header">
+                <button class="btn-back" onclick="app.goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <div class="page-title">合作项目跟进</div>
+                <div class="placeholder"></div>
+            </div>
+            <div class="page-content scrollable">
+                <div class="project-list" id="projectList">
+                    <!-- 动态生成 -->
+                </div>
+                <div class="add-project-section">
+                    <button class="btn-primary btn-add" onclick="app.showAddProjectModal()">
+                        <span>+ 新增项目跟进</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面7: 活动评价 -->
+        <div class="page" id="page-review">
+            <div class="page-header">
+                <button class="btn-back" onclick="app.goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <div class="page-title">活动评价</div>
+                <div class="placeholder"></div>
+            </div>
+            <div class="page-content scrollable">
+                <div class="review-header">
+                    <p class="review-thanks">感谢您参加2026武汉联通合作伙伴大会</p>
+                </div>
+                <div class="review-form">
+                    <div class="review-section">
+                        <div class="review-label">活动整体满意度评分</div>
+                        <div class="star-rating" id="overallRating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                    <div class="review-section">
+                        <div class="review-label">您的评价</div>
+                        <textarea class="review-textarea" id="reviewText" placeholder="请输入您的评价（限100字）" maxlength="100"></textarea>
+                        <div class="char-count"><span id="charCount">0</span>/100</div>
+                    </div>
+                    <div class="review-section">
+                        <div class="review-label">单项评分</div>
+                        <div class="sub-ratings">
+                            <div class="sub-rating-item">
+                                <span class="sub-label">活动组织</span>
+                                <div class="star-rating small" id="ratingOrg">
+                                    <span class="star" data-value="1">★</span>
+                                    <span class="star" data-value="2">★</span>
+                                    <span class="star" data-value="3">★</span>
+                                    <span class="star" data-value="4">★</span>
+                                    <span class="star" data-value="5">★</span>
+                                </div>
+                            </div>
+                            <div class="sub-rating-item">
+                                <span class="sub-label">活动服务</span>
+                                <div class="star-rating small" id="ratingService">
+                                    <span class="star" data-value="1">★</span>
+                                    <span class="star" data-value="2">★</span>
+                                    <span class="star" data-value="3">★</span>
+                                    <span class="star" data-value="4">★</span>
+                                    <span class="star" data-value="5">★</span>
+                                </div>
+                            </div>
+                            <div class="sub-rating-item">
+                                <span class="sub-label">会场氛围</span>
+                                <div class="star-rating small" id="ratingAtmosphere">
+                                    <span class="star" data-value="1">★</span>
+                                    <span class="star" data-value="2">★</span>
+                                    <span class="star" data-value="3">★</span>
+                                    <span class="star" data-value="4">★</span>
+                                    <span class="star" data-value="5">★</span>
+                                </div>
+                            </div>
+                            <div class="sub-rating-item">
+                                <span class="sub-label">活动内容</span>
+                                <div class="star-rating small" id="ratingContent">
+                                    <span class="star" data-value="1">★</span>
+                                    <span class="star" data-value="2">★</span>
+                                    <span class="star" data-value="3">★</span>
+                                    <span class="star" data-value="4">★</span>
+                                    <span class="star" data-value="5">★</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary btn-submit-review" onclick="app.submitReview()">
+                        <span>提交评价</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗容器 -->
+    <div class="modal-overlay" id="modalOverlay" onclick="app.closeModal()"></div>
+    
+    <!-- 成功提示弹窗 -->
+    <div class="modal success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <div class="success-text">预约信息提交成功</div>
+        </div>
+    </div>
+
+    <!-- 场地信息弹窗 -->
+    <div class="modal info-modal" id="venueModal">
+        <div class="modal-header">
+            <div class="modal-title" id="venueModalTitle">标题</div>
+            <button class="modal-close" onclick="app.closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="venueModalBody">
+            <!-- 动态内容 -->
+        </div>
+    </div>
+
+    <!-- 新增项目弹窗 -->
+    <div class="modal project-modal" id="addProjectModal">
+        <div class="modal-header">
+            <div class="modal-title">新增项目跟进</div>
+            <button class="modal-close" onclick="app.closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <form id="addProjectForm">
+                <div class="form-group">
+                    <label>项目名称</label>
+                    <input type="text" class="form-input" id="newProjectName" placeholder="请输入项目名称">
+                </div>
+                <div class="form-group">
+                    <label>所属公司/单位</label>
+                    <input type="text" class="form-input" id="newProjectCompany" placeholder="请输入公司名称">
+                </div>
+                <div class="form-group">
+                    <label>对接负责人</label>
+                    <input type="text" class="form-input" id="newProjectManager" placeholder="请输入负责人姓名">
+                </div>
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="tel" class="form-input" id="newProjectPhone" placeholder="请输入联系电话">
+                </div>
+                <div class="form-group">
+                    <label>目前进展</label>
+                    <textarea class="form-input" id="newProjectProgress" rows="3" placeholder="请输入项目进展情况"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>项目进度 (%)</label>
+                    <input type="range" class="form-range" id="newProjectPercent" min="0" max="100" value="0" oninput="document.getElementById('rangeValue').textContent = this.value + '%'">
+                    <div class="range-value" id="rangeValue">0%</div>
+                </div>
+            </form>
+            <button type="button" class="btn-primary btn-modal-submit" onclick="app.submitNewProject()">
+                <span>确认添加</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
