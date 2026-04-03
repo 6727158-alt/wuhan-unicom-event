@@ -1,598 +1,414 @@
-/**
- * 武汉联通合作伙伴大会 H5 小程序
- * 单页面应用 (SPA) 主逻辑
- */
-
-const app = {
-    // 当前页面状态
-    currentPage: 'cover',
-    
-    // 用户预约状态
-    isRegistered: false,
-    
-    // 评分状态
+// 应用状态
+const appState = {
+    currentPage: 'home',
+    bookingData: {},
     ratings: {
         overall: 0,
-        org: 0,
+        organization: 0,
         service: 0,
         atmosphere: 0,
         content: 0
-    },
-
-    // 初始化
-    init() {
-        this.loadRegistrationStatus();
-        this.initStarRatings();
-        this.initTextareaCount();
-        this.generateBoothData();
-        this.generateProjectData();
-        this.showPage('cover');
-        this.initSwipeHandler();
-    },
-
-    // 初始化上滑手势
-    initSwipeHandler() {
-        const coverPage = document.getElementById('page-cover');
-        if (!coverPage) return;
-
-        let startY = 0;
-        let endY = 0;
-        const threshold = 80; // 滑动阈值
-
-        // 触摸事件
-        coverPage.addEventListener('touchstart', (e) => {
-            startY = e.touches[0].clientY;
-        }, { passive: true });
-
-        coverPage.addEventListener('touchmove', (e) => {
-            endY = e.touches[0].clientY;
-        }, { passive: true });
-
-        coverPage.addEventListener('touchend', () => {
-            const diff = startY - endY;
-            if (diff > threshold) {
-                // 上滑超过阈值，进入下一页
-                this.showPage('register');
-            }
-        });
-
-        // 鼠标事件（桌面端）
-        coverPage.addEventListener('mousedown', (e) => {
-            startY = e.clientY;
-        });
-
-        coverPage.addEventListener('mouseup', (e) => {
-            endY = e.clientY;
-            const diff = startY - endY;
-            if (diff > threshold) {
-                this.showPage('register');
-            }
-        });
-
-        // 点击上滑提示也能进入
-        const swipeHint = coverPage.querySelector('.swipe-hint');
-        if (swipeHint) {
-            swipeHint.addEventListener('click', () => {
-                this.showPage('register');
-            });
-        }
-
-        // 滚轮事件
-        coverPage.addEventListener('wheel', (e) => {
-            if (e.deltaY < -30) {
-                this.showPage('register');
-            }
-        });
-    },
-
-    // 加载预约状态
-    loadRegistrationStatus() {
-        const status = localStorage.getItem('wuhanUnicomRegistered');
-        this.isRegistered = status === 'true';
-    },
-
-    // 保存预约状态
-    saveRegistrationStatus() {
-        localStorage.setItem('wuhanUnicomRegistered', 'true');
-        this.isRegistered = true;
-    },
-
-    // 显示指定页面
-    showPage(pageName) {
-        console.log('Showing page:', pageName);
-        // 隐藏所有页面
-        document.querySelectorAll('.page').forEach(page => {
-            page.classList.remove('active');
-        });
-        
-        // 显示目标页面
-        const targetPage = document.getElementById(`page-${pageName}`);
-        if (targetPage) {
-            targetPage.classList.add('active');
-            this.currentPage = pageName;
-            
-            // 滚动到顶部
-            const scrollable = targetPage.querySelector('.scrollable');
-            if (scrollable) {
-                scrollable.scrollTop = 0;
-            }
-        } else {
-            console.error('Page not found:', pageName);
-        }
-    },
-
-    // 进入活动（封面页按钮）
-    enterEvent() {
-        if (this.isRegistered) {
-            // 已预约用户直接进入首页
-            this.showPage('home');
-        } else {
-            // 未预约用户进入登记页
-            this.showPage('register');
-        }
-    },
-
-    // 提交预约登记
-    submitRegistration() {
-        const fields = [
-            { id: 'regName', errorId: 'error-name', key: 'name' },
-            { id: 'regPhone', errorId: 'error-phone', key: 'phone' },
-            { id: 'regCompany', errorId: 'error-company', key: 'company' },
-            { id: 'regIndustry', errorId: 'error-industry', key: 'industry' },
-            { id: 'regGuests', errorId: 'error-guests', key: 'guests' }
-        ];
-
-        let isValid = true;
-        const formData = {};
-
-        // 验证所有字段
-        fields.forEach(field => {
-            const input = document.getElementById(field.id);
-            const errorMsg = document.getElementById(field.errorId);
-            const value = input.value.trim();
-            
-            formData[field.key] = value;
-            
-            if (!value) {
-                isValid = false;
-                errorMsg.style.display = 'block';
-                input.classList.add('error');
-            } else {
-                errorMsg.style.display = 'none';
-                input.classList.remove('error');
-            }
-        });
-
-        // 验证手机号格式
-        const phoneInput = document.getElementById('regPhone');
-        const phoneValue = phoneInput.value.trim();
-        const phoneRegex = /^1[3-9]\d{9}$/;
-        if (phoneValue && !phoneRegex.test(phoneValue)) {
-            isValid = false;
-            document.getElementById('error-phone').textContent = '*请输入正确的手机号码';
-            document.getElementById('error-phone').style.display = 'block';
-            phoneInput.classList.add('error');
-        }
-
-        if (isValid) {
-            // 保存用户数据
-            localStorage.setItem('wuhanUnicomUserData', JSON.stringify(formData));
-            this.saveRegistrationStatus();
-            
-            // 显示成功弹窗
-            this.showSuccessModal();
-            
-            // 2秒后跳转到首页
-            setTimeout(() => {
-                this.closeModal();
-                this.showPage('home');
-            }, 2000);
-        }
-    },
-
-    // 显示成功弹窗
-    showSuccessModal() {
-        const overlay = document.getElementById('modalOverlay');
-        const modal = document.getElementById('successModal');
-        
-        overlay.classList.add('active');
-        modal.classList.add('active');
-    },
-
-    // 关闭弹窗
-    closeModal() {
-        const overlay = document.getElementById('modalOverlay');
-        const modals = document.querySelectorAll('.modal');
-        
-        overlay.classList.remove('active');
-        modals.forEach(modal => modal.classList.remove('active'));
-    },
-
-    // 显示场地信息弹窗
-    showModal(type) {
-        const overlay = document.getElementById('modalOverlay');
-        const modal = document.getElementById('venueModal');
-        const title = document.getElementById('venueModalTitle');
-        const body = document.getElementById('venueModalBody');
-
-        const contents = {
-            route: {
-                title: '参会路线图',
-                content: `
-                    <div class="map-placeholder">
-                        <div class="map-icon">🗺️</div>
-                        <p>参会路线图</p>
-                        <p class="map-desc">请从武汉会议中心主入口进入，沿指示牌前往黄鹤厅</p>
-                    </div>
-                `
-            },
-            layout: {
-                title: '会场布局图',
-                content: `
-                    <div class="map-placeholder">
-                        <div class="map-icon">🏛️</div>
-                        <p>会场布局图</p>
-                        <p class="map-desc">黄鹤厅分为A、B、C、D四个区域，舞台位于北侧</p>
-                    </div>
-                `
-            },
-            address: {
-                title: '会场详细地址',
-                content: `
-                    <div class="address-info">
-                        <div class="address-item">
-                            <span class="address-label">会场名称</span>
-                            <span class="address-value">武汉会议中心</span>
-                        </div>
-                        <div class="address-item">
-                            <span class="address-label">详细地址</span>
-                            <span class="address-value">武汉市江岸区惠济路38号</span>
-                        </div>
-                        <div class="address-item">
-                            <span class="address-label">会场电话</span>
-                            <span class="address-value">027-82300888</span>
-                        </div>
-                        <div class="address-item">
-                            <span class="address-label">活动负责人</span>
-                            <span class="address-value">139XXXXXXXX</span>
-                        </div>
-                    </div>
-                `
-            }
-        };
-
-        const data = contents[type];
-        if (data) {
-            title.textContent = data.title;
-            body.innerHTML = data.content;
-            
-            overlay.classList.add('active');
-            modal.classList.add('active');
-        }
-    },
-
-    // 页面导航
-    navigateTo(page) {
-        const pageMap = {
-            'venue': 'venue',
-            'seating': 'seating',
-            'projects': 'projects',
-            'review': 'review'
-        };
-        
-        const targetPage = pageMap[page];
-        if (targetPage) {
-            this.showPage(targetPage);
-        }
-    },
-
-    // 返回上一页
-    goBack() {
-        this.showPage('home');
-    },
-
-    // 生成展位数据
-    generateBoothData() {
-        const companies = [
-            { name: '华为技术有限公司', project: '5G智慧园区联合建设', contact: '张经理', phone: '13800138001' },
-            { name: '中兴通讯股份有限公司', project: '企业专线升级服务', contact: '李经理', phone: '13800138002' },
-            { name: '烽火通信科技股份有限公司', project: '光纤网络改造工程', contact: '王经理', phone: '13800138003' },
-            { name: '腾讯云计算有限公司', project: '云数据中心合作', contact: '陈经理', phone: '13800138004' },
-            { name: '阿里巴巴网络技术有限公司', project: '智慧城市解决方案', contact: '刘经理', phone: '13800138005' },
-            { name: '百度在线网络技术公司', project: 'AI智能客服系统', contact: '赵经理', phone: '13800138006' },
-            { name: '京东数字科技集团', project: '物联网平台建设', contact: '孙经理', phone: '13800138007' },
-            { name: '小米通讯技术有限公司', project: '智能家居生态合作', contact: '周经理', phone: '13800138008' }
-        ];
-
-        const boothList = document.getElementById('boothList');
-        if (!boothList) return;
-
-        boothList.innerHTML = companies.map((company, index) => `
-            <div class="booth-card">
-                <div class="booth-header">
-                    <span class="booth-number">A${String(index + 1).padStart(2, '0')}</span>
-                    <span class="booth-name">${company.name}</span>
-                </div>
-                <div class="booth-info">
-                    <div class="booth-item">
-                        <span class="booth-label">合作项目</span>
-                        <span class="booth-value">${company.project}</span>
-                    </div>
-                    <div class="booth-item">
-                        <span class="booth-label">联系人</span>
-                        <span class="booth-value">${company.contact}</span>
-                    </div>
-                    <div class="booth-item">
-                        <span class="booth-label">联系方式</span>
-                        <span class="booth-value">${company.phone}</span>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    },
-
-    // 生成项目数据
-    generateProjectData() {
-        const projects = [
-            {
-                name: '武汉市政务云5G专网建设',
-                company: '武汉市政务服务中心',
-                manager: '张主任',
-                phone: '13912345678',
-                createTime: '2026-01-15',
-                progress: '已完成需求调研，正在进行方案设计',
-                percent: 35
-            },
-            {
-                name: '东湖高新区智慧园区项目',
-                company: '东湖高新集团',
-                manager: '李经理',
-                phone: '13987654321',
-                createTime: '2026-02-01',
-                progress: '设备采购中，预计3月底到货',
-                percent: 50
-            },
-            {
-                name: '武汉地铁5G覆盖工程',
-                company: '武汉地铁集团',
-                manager: '王工',
-                phone: '13811112222',
-                createTime: '2025-12-10',
-                progress: '一期施工已完成，二期准备中',
-                percent: 65
-            },
-            {
-                name: '江汉路商圈数字化改造',
-                company: '江汉区商务局',
-                manager: '陈科长',
-                phone: '13833334444',
-                createTime: '2026-01-20',
-                progress: '正在进行系统集成测试',
-                percent: 80
-            },
-            {
-                name: '武汉大学5G智慧校园',
-                company: '武汉大学',
-                manager: '刘处长',
-                phone: '13855556666',
-                createTime: '2026-02-15',
-                progress: '项目启动会已召开，需求收集中',
-                percent: 15
-            }
-        ];
-
-        // 从localStorage读取新增的项目
-        const savedProjects = localStorage.getItem('wuhanUnicomProjects');
-        const allProjects = savedProjects ? [...projects, ...JSON.parse(savedProjects)] : projects;
-
-        this.renderProjectList(allProjects);
-    },
-
-    // 渲染项目列表
-    renderProjectList(projects) {
-        const projectList = document.getElementById('projectList');
-        if (!projectList) return;
-
-        projectList.innerHTML = projects.map(project => `
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-name">${project.name}</div>
-                    <div class="project-company">${project.company}</div>
-                </div>
-                <div class="project-info">
-                    <div class="info-row">
-                        <span class="info-label">对接负责人</span>
-                        <span class="info-value">${project.manager}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">联系电话</span>
-                        <span class="info-value">${project.phone}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">创建时间</span>
-                        <span class="info-value">${project.createTime}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">目前进展</span>
-                        <span class="info-value">${project.progress}</span>
-                    </div>
-                </div>
-                <div class="project-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${project.percent}%"></div>
-                    </div>
-                    <div class="progress-text">${project.percent}%</div>
-                </div>
-            </div>
-        `).join('');
-    },
-
-    // 显示新增项目弹窗
-    showAddProjectModal() {
-        const overlay = document.getElementById('modalOverlay');
-        const modal = document.getElementById('addProjectModal');
-        
-        // 重置表单
-        document.getElementById('addProjectForm').reset();
-        document.getElementById('rangeValue').textContent = '0%';
-        
-        overlay.classList.add('active');
-        modal.classList.add('active');
-    },
-
-    // 提交新增项目
-    submitNewProject() {
-        const name = document.getElementById('newProjectName').value.trim();
-        const company = document.getElementById('newProjectCompany').value.trim();
-        const manager = document.getElementById('newProjectManager').value.trim();
-        const phone = document.getElementById('newProjectPhone').value.trim();
-        const progress = document.getElementById('newProjectProgress').value.trim();
-        const percent = parseInt(document.getElementById('newProjectPercent').value);
-
-        if (!name || !company || !manager || !phone) {
-            alert('请填写完整的项目信息');
-            return;
-        }
-
-        const newProject = {
-            name,
-            company,
-            manager,
-            phone,
-            createTime: new Date().toISOString().split('T')[0],
-            progress: progress || '项目已创建',
-            percent
-        };
-
-        // 保存到localStorage
-        const savedProjects = localStorage.getItem('wuhanUnicomProjects');
-        const projects = savedProjects ? JSON.parse(savedProjects) : [];
-        projects.push(newProject);
-        localStorage.setItem('wuhanUnicomProjects', JSON.stringify(projects));
-
-        // 关闭弹窗并刷新列表
-        this.closeModal();
-        this.generateProjectData();
-    },
-
-    // 初始化星级评分
-    initStarRatings() {
-        const ratingGroups = [
-            { id: 'overallRating', key: 'overall' },
-            { id: 'ratingOrg', key: 'org' },
-            { id: 'ratingService', key: 'service' },
-            { id: 'ratingAtmosphere', key: 'atmosphere' },
-            { id: 'ratingContent', key: 'content' }
-        ];
-
-        ratingGroups.forEach(group => {
-            const container = document.getElementById(group.id);
-            if (!container) return;
-
-            const stars = container.querySelectorAll('.star');
-            stars.forEach((star, index) => {
-                star.addEventListener('click', () => {
-                    this.ratings[group.key] = index + 1;
-                    this.updateStarDisplay(container, index + 1);
-                });
-            });
-        });
-    },
-
-    // 更新星级显示
-    updateStarDisplay(container, rating) {
-        const stars = container.querySelectorAll('.star');
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.add('active');
-            } else {
-                star.classList.remove('active');
-            }
-        });
-    },
-
-    // 初始化文本框字数统计
-    initTextareaCount() {
-        const textarea = document.getElementById('reviewText');
-        const charCount = document.getElementById('charCount');
-        
-        if (textarea && charCount) {
-            textarea.addEventListener('input', () => {
-                charCount.textContent = textarea.value.length;
-            });
-        }
-    },
-
-    // 提交评价
-    submitReview() {
-        const reviewText = document.getElementById('reviewText').value.trim();
-        
-        // 验证评分
-        if (this.ratings.overall === 0) {
-            alert('请为活动整体满意度评分');
-            return;
-        }
-
-        // 收集评价数据
-        const reviewData = {
-            overall: this.ratings.overall,
-            text: reviewText,
-            org: this.ratings.org,
-            service: this.ratings.service,
-            atmosphere: this.ratings.atmosphere,
-            content: this.ratings.content,
-            submitTime: new Date().toISOString()
-        };
-
-        // 保存评价（实际项目中应发送到服务器）
-        const existingReviews = localStorage.getItem('wuhanUnicomReviews');
-        const reviews = existingReviews ? JSON.parse(existingReviews) : [];
-        reviews.push(reviewData);
-        localStorage.setItem('wuhanUnicomReviews', JSON.stringify(reviews));
-
-        // 显示成功提示
-        alert('感谢您的评价！');
-        
-        // 返回首页
-        this.showPage('home');
-        
-        // 重置表单
-        this.resetReviewForm();
-    },
-
-    // 重置评价表单
-    resetReviewForm() {
-        document.getElementById('reviewText').value = '';
-        document.getElementById('charCount').textContent = '0';
-        
-        this.ratings = { overall: 0, org: 0, service: 0, atmosphere: 0, content: 0 };
-        
-        const ratingGroups = ['overallRating', 'ratingOrg', 'ratingService', 'ratingAtmosphere', 'ratingContent'];
-        ratingGroups.forEach(id => {
-            const container = document.getElementById(id);
-            if (container) {
-                this.updateStarDisplay(container, 0);
-            }
-        });
     }
 };
 
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', () => {
-    app.init();
+// 合作伙伴数据（随机生成）
+const companies = [
+    '华为技术有限公司', '中兴通讯股份有限公司', '腾讯科技', '阿里巴巴集团', '百度在线网络技术',
+    '京东集团', '小米科技', '联想集团', '海尔集团', '美的集团',
+    '中国移动通信', '中国电信集团', '中国联合网络通信', '烽火通信科技', '长飞光纤光缆',
+    '东风汽车集团', '武汉钢铁集团', '中国建筑集团', '中国中铁股份', '中国交建集团'
+];
+
+const industries = ['互联网', '通信', '制造业', '金融', '教育', '医疗', '政务', '能源'];
+
+const projectTypes = [
+    '5G智慧园区建设', '企业专线升级服务', '云计算数据中心', '物联网平台搭建', '智慧城市解决方案',
+    '工业互联网平台', 'AI智能客服系统', '大数据分析平台', '网络安全防护', '视频会议系统'
+];
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    initSplashScreen();
+    initForms();
+    initRatings();
+    generateBooths();
+    generateProjects();
+    generateGallery();
 });
 
-// 防止iOS橡皮筋效果
-document.addEventListener('touchmove', (e) => {
-    if (e.target.closest('.scrollable')) {
-        const scrollable = e.target.closest('.scrollable');
-        const scrollTop = scrollable.scrollTop;
-        const scrollHeight = scrollable.scrollHeight;
-        const clientHeight = scrollable.clientHeight;
+// 启动页动画
+function initSplashScreen() {
+    const splash = document.getElementById('splash-screen');
+    const app = document.getElementById('app');
+    
+    setTimeout(() => {
+        splash.classList.add('hidden');
+        app.style.display = 'block';
         
-        if ((scrollTop <= 0 && e.touches[0].clientY > 0) || 
-            (scrollTop + clientHeight >= scrollHeight && e.touches[0].clientY < 0)) {
-            e.preventDefault();
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 500);
+    }, 2500);
+}
+
+// 页面导航
+function navigateTo(page) {
+    // 隐藏所有页面
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+    });
+    
+    // 显示目标页面
+    const targetPage = document.getElementById(`page-${page}`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        appState.currentPage = page;
+        
+        // 更新底部导航
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // 滚动到顶部
+        window.scrollTo(0, 0);
+    }
+    
+    // 更新底部导航状态
+    updateBottomNav(page);
+}
+
+function updateBottomNav(page) {
+    const navMap = {
+        'home': 0,
+        'booking': 1,
+        'live': 2,
+        'review': 3
+    };
+    
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach((item, index) => {
+        item.classList.remove('active');
+        if (index === navMap[page]) {
+            item.classList.add('active');
         }
+    });
+}
+
+// 数字选择器
+function changeNumber(delta) {
+    const input = document.querySelector('input[name="companions"]');
+    let value = parseInt(input.value) + delta;
+    value = Math.max(0, Math.min(10, value));
+    input.value = value;
+}
+
+// 初始化表单
+function initForms() {
+    // 预约表单
+    const bookingForm = document.getElementById('booking-form');
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            appState.bookingData = {
+                name: formData.get('name'),
+                phone: formData.get('phone'),
+                company: formData.get('company'),
+                industry: formData.get('industry'),
+                companions: formData.get('companions')
+            };
+            
+            showToast('预约提交成功！我们会尽快与您联系。');
+            this.reset();
+            
+            setTimeout(() => {
+                navigateTo('home');
+            }, 1500);
+        });
+    }
+    
+    // 评价表单
+    const reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (appState.ratings.overall === 0) {
+                showToast('请为活动整体满意度评分');
+                return;
+            }
+            
+            showToast('评价提交成功！感谢您的反馈。');
+            this.reset();
+            resetRatings();
+            
+            setTimeout(() => {
+                navigateTo('home');
+            }, 1500);
+        });
+        
+        // 字数统计
+        const textarea = reviewForm.querySelector('textarea[name="comment"]');
+        const charCount = reviewForm.querySelector('.char-count');
+        
+        textarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = `${length}/100`;
+        });
+    }
+}
+
+// 初始化评分
+function initRatings() {
+    // 整体满意度评分
+    const overallStars = document.querySelector('.star-rating');
+    if (overallStars) {
+        const stars = overallStars.querySelectorAll('i');
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                appState.ratings.overall = index + 1;
+                updateStarDisplay(overallStars, index + 1);
+            });
+        });
+    }
+    
+    // 单项评分
+    const categories = ['organization', 'service', 'atmosphere', 'content'];
+    categories.forEach(category => {
+        const container = document.querySelector(`.category-stars[data-category="${category}"]`);
+        if (container) {
+            const stars = container.querySelectorAll('i');
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    appState.ratings[category] = index + 1;
+                    updateStarDisplay(container, index + 1);
+                });
+            });
+        }
+    });
+}
+
+function updateStarDisplay(container, rating) {
+    const stars = container.querySelectorAll('i');
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.remove('far');
+            star.classList.add('fas', 'active');
+        } else {
+            star.classList.remove('fas', 'active');
+            star.classList.add('far');
+        }
+    });
+}
+
+function resetRatings() {
+    appState.ratings = {
+        overall: 0,
+        organization: 0,
+        service: 0,
+        atmosphere: 0,
+        content: 0
+    };
+    
+    document.querySelectorAll('.star-rating i, .category-stars i').forEach(star => {
+        star.classList.remove('fas', 'active');
+        star.classList.add('far');
+    });
+}
+
+// 生成展位数据
+function generateBooths() {
+    const boothList = document.getElementById('booth-list');
+    if (!boothList) return;
+    
+    const boothData = [];
+    const zones = ['A', 'B', 'C'];
+    
+    zones.forEach(zone => {
+        for (let i = 1; i <= 6; i++) {
+            const company = companies[Math.floor(Math.random() * companies.length)];
+            const project = projectTypes[Math.floor(Math.random() * projectTypes.length)];
+            
+            boothData.push({
+                number: `${zone}0${i}`,
+                name: company,
+                project: project,
+                contact: `张经理`,
+                phone: `138${String(Math.floor(Math.random() * 100000000)).padStart(8, '0')}`
+            });
+        }
+    });
+    
+    boothList.innerHTML = boothData.map(booth => `
+        <div class="booth-card">
+            <div class="booth-header">
+                <span class="booth-number">${booth.number}</span>
+                <span class="booth-name">${booth.name}</span>
+            </div>
+            <div class="booth-project">
+                <i class="fas fa-project-diagram"></i> ${booth.project}
+            </div>
+            <div class="booth-contact">
+                <span><i class="fas fa-user"></i> ${booth.contact}</span>
+                <span><i class="fas fa-phone"></i> ${booth.phone}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 生成项目数据
+function generateProjects() {
+    const projectsList = document.getElementById('projects-list');
+    if (!projectsList) return;
+    
+    const statuses = ['in-progress', 'completed', 'pending'];
+    const statusText = {
+        'in-progress': '进行中',
+        'completed': '已完成',
+        'pending': '待启动'
+    };
+    
+    const projectData = [];
+    
+    for (let i = 0; i < 8; i++) {
+        const company = companies[Math.floor(Math.random() * companies.length)];
+        const project = projectTypes[Math.floor(Math.random() * projectTypes.length)];
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        const progress = status === 'completed' ? 100 : status === 'pending' ? 0 : Math.floor(Math.random() * 80) + 10;
+        
+        const startDate = new Date(2025, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
+        
+        projectData.push({
+            title: `${company}${project}`,
+            company: company,
+            manager: `李经理`,
+            phone: `139${String(Math.floor(Math.random() * 100000000)).padStart(8, '0')}`,
+            startDate: startDate.toLocaleDateString('zh-CN'),
+            progress: progress,
+            status: status,
+            statusText: statusText[status]
+        });
+    }
+    
+    projectsList.innerHTML = projectData.map(project => `
+        <div class="project-card">
+            <div class="project-header">
+                <div>
+                    <h4 class="project-title">${project.title}</h4>
+                    <span class="project-company">${project.company}</span>
+                </div>
+                <span class="project-status ${project.status}">${project.statusText}</span>
+            </div>
+            <div class="project-info">
+                <div class="project-info-item">
+                    <span>对接负责人</span>
+                    <strong>${project.manager}</strong>
+                </div>
+                <div class="project-info-item">
+                    <span>联系电话</span>
+                    <strong>${project.phone}</strong>
+                </div>
+                <div class="project-info-item">
+                    <span>创建时间</span>
+                    <strong>${project.startDate}</strong>
+                </div>
+                <div class="project-info-item">
+                    <span>当前进展</span>
+                    <strong>${project.progress}%</strong>
+                </div>
+            </div>
+            <div class="project-progress">
+                <div class="progress-header">
+                    <span>项目进度</span>
+                    <span>${project.progress}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${project.progress}%"></div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 生成相册
+function generateGallery() {
+    const galleryGrid = document.getElementById('gallery-grid');
+    if (!galleryGrid) return;
+    
+    const colors = [
+        'linear-gradient(135deg, #E53935 0%, #FF5252 100%)',
+        'linear-gradient(135deg, #7C4DFF 0%, #448AFF 100%)',
+        'linear-gradient(135deg, #00BCD4 0%, #009688 100%)',
+        'linear-gradient(135deg, #FF6B35 0%, #FFD700 100%)',
+        'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)',
+        'linear-gradient(135deg, #3F51B5 0%, #2196F3 100%)'
+    ];
+    
+    for (let i = 1; i <= 9; i++) {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.setAttribute('data-index', i);
+        item.style.background = colors[(i - 1) % colors.length];
+        galleryGrid.appendChild(item);
+    }
+}
+
+// 加载更多照片
+function loadMorePhotos() {
+    const galleryGrid = document.getElementById('gallery-grid');
+    const currentCount = galleryGrid.children.length;
+    const colors = [
+        'linear-gradient(135deg, #E53935 0%, #FF5252 100%)',
+        'linear-gradient(135deg, #7C4DFF 0%, #448AFF 100%)',
+        'linear-gradient(135deg, #00BCD4 0%, #009688 100%)',
+        'linear-gradient(135deg, #FF6B35 0%, #FFD700 100%)',
+        'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)',
+        'linear-gradient(135deg, #3F51B5 0%, #2196F3 100%)'
+    ];
+    
+    for (let i = 1; i <= 6; i++) {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.setAttribute('data-index', currentCount + i);
+        item.style.background = colors[(currentCount + i - 1) % colors.length];
+        galleryGrid.appendChild(item);
+    }
+    
+    showToast('已加载更多照片');
+}
+
+// 打开地图导航
+function openMap() {
+    const address = '武汉市江岸区惠济路38号';
+    const url = `https://map.baidu.com/search/${encodeURIComponent(address)}`;
+    window.open(url, '_blank');
+}
+
+// 显示提示消息
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// 防止页面滚动穿透
+document.addEventListener('touchmove', function(e) {
+    if (e.target.closest('.page.active')) {
+        return;
     }
 }, { passive: false });
+
+// 处理返回按钮
+window.addEventListener('popstate', function(e) {
+    if (appState.currentPage !== 'home') {
+        e.preventDefault();
+        navigateTo('home');
+    }
+});
