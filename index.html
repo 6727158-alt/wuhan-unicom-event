@@ -4,685 +4,1423 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026年武汉联通合作伙伴大会</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: #f5f5f5;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        
+        .animate-in { animation: fadeIn 0.6s ease-out; }
+        
+        /* 首页 */
+        .banner {
+            position: relative;
+            height: 320px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .banner-content { position: relative; z-index: 1; }
+        .banner-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .banner-title { font-size: 20px; font-weight: 500; opacity: 0.9; }
+        .banner-subtitle { font-size: 36px; font-weight: bold; margin-top: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .banner-date { font-size: 14px; margin-top: 12px; opacity: 0.9; }
+        .banner-location { font-size: 13px; margin-top: 6px; opacity: 0.8; }
+        
+        .countdown {
+            margin-top: 25px;
+            background: rgba(255,255,255,0.15);
+            padding: 15px 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        .countdown-label { font-size: 11px; opacity: 0.8; margin-bottom: 8px; }
+        .countdown-box { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .countdown-item { text-align: center; }
+        .countdown-num {
+            background: rgba(255,255,255,0.25);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            min-width: 50px;
+        }
+        .countdown-unit { font-size: 11px; margin-top: 4px; opacity: 0.8; }
+        .countdown-sep { font-size: 24px; font-weight: bold; opacity: 0.6; }
+        
+        /* 快捷入口 */
+        .quick-entry {
+            display: flex;
+            background: #fff;
+            padding: 25px 10px;
+            margin: -30px 15px 15px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 10;
+        }
+        .entry-item { flex: 1; text-align: center; cursor: pointer; transition: transform 0.2s; }
+        .entry-item:active { transform: scale(0.95); }
+        .entry-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .entry-item:hover .entry-icon { transform: translateY(-3px); }
+        .bg-blue { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .bg-green { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .bg-orange { background: linear-gradient(135deg, #fc4a1a, #f7b733); }
+        .bg-purple { background: linear-gradient(135deg, #a855f7, #ec4899); }
+        .entry-text { font-size: 13px; margin-top: 10px; color: #333; font-weight: 500; }
+        
+        /* 卡片 */
+        .card {
+            background: #fff;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-title { font-size: 17px; font-weight: 600; color: #333; }
+        .card-more { font-size: 13px; color: #667eea; cursor: pointer; }
+        
+        /* 活动亮点 - 大图展示 */
+        .highlight-big {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .highlight-big:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .highlight-big-image {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+        }
+        .highlight-big:nth-child(2) .highlight-big-image { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .highlight-big:nth-child(3) .highlight-big-image { background: linear-gradient(135deg, #fc4a1a, #f7b733); }
+        .highlight-big-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            font-size: 11px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .highlight-big-content { padding: 18px; }
+        .highlight-big-title { font-size: 18px; font-weight: 700; color: #333; margin-bottom: 8px; }
+        .highlight-big-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 12px; }
+        .highlight-big-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+        .highlight-big-meta span { display: flex; align-items: center; gap: 4px; }
+        
+        /* 统计数据 */
+        .stats-grid { display: flex; flex-wrap: wrap; }
+        .stat-item { width: 50%; text-align: center; padding: 18px 0; position: relative; }
+        .stat-item:nth-child(1), .stat-item:nth-child(2) { border-bottom: 1px solid #f0f0f0; }
+        .stat-item:nth-child(1), .stat-item:nth-child(3) { border-right: 1px solid #f0f0f0; }
+        .stat-num { font-size: 28px; font-weight: 700; color: #667eea; }
+        .stat-label { font-size: 12px; color: #999; margin-top: 6px; }
+        .stat-change { font-size: 10px; color: #52c41a; margin-top: 4px; }
+        
+        /* 议程时间线 */
+        .timeline { position: relative; padding-left: 30px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+        .timeline-item { position: relative; padding-bottom: 20px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-dot {
+            position: absolute;
+            left: -26px;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #667eea;
+        }
+        .timeline-dot.active { background: #667eea; box-shadow: 0 0 0 4px rgba(102,126,234,0.2); }
+        .timeline-time { font-size: 12px; color: #667eea; font-weight: 600; }
+        .timeline-title { font-size: 15px; color: #333; font-weight: 500; margin-top: 4px; }
+        .timeline-speaker { font-size: 12px; color: #999; margin-top: 4px; }
+        .timeline-tag {
+            display: inline-block;
+            background: #f0f3ff;
+            color: #667eea;
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        
+        /* 嘉宾列表 */
+        .speaker-list { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .speaker-item {
+            min-width: 100px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .speaker-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        .speaker-name { font-size: 14px; font-weight: 600; color: #333; }
+        .speaker-title { font-size: 11px; color: #999; margin-top: 3px; }
+        
+        /* 合作伙伴 */
+        .partner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .partner-item {
+            aspect-ratio: 1;
+            background: #f8f8f8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: transform 0.2s;
+        }
+        .partner-item:hover { transform: scale(1.05); background: #f0f3ff; }
+        
+        /* 底部按钮 */
+        .bottom-action {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            padding: 12px 20px 25px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            height: 48px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(102,126,234,0.3); }
+        
+        /* 页面切换 */
+        .page { display: none; padding-bottom: 90px; }
+        .page.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        /* 返回按钮 */
+        .nav-bar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-back { font-size: 24px; cursor: pointer; padding: 5px; margin-right: 10px; }
+        .nav-title { font-size: 18px; font-weight: 600; flex: 1; text-align: center; margin-right: 34px; }
+        
+        /* 表单样式优化 */
+        .form-group { margin-bottom: 20px; }
+        .form-label { font-size: 14px; color: #333; font-weight: 500; margin-bottom: 8px; display: block; }
+        .form-label .required { color: #ff4d4f; margin-left: 2px; }
+        .input {
+            width: 100%;
+            background: #f8f8f8;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .input:focus { background: #fff; border-color: #667eea; outline: none; }
+        .textarea {
+            width: 100%;
+            background: #f8f8f8;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 15px;
+            height: 100px;
+            resize: none;
+            transition: all 0.2s;
+        }
+        .textarea:focus { background: #fff; border-color: #667eea; outline: none; }
+        
+        /* 单选卡片 */
+        .radio-card {
+            background: #f8f8f8;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .radio-card:hover { background: #f0f3ff; }
+        .radio-card.active { border-color: #667eea; background: #f0f3ff; }
+        .radio-card-title { font-size: 15px; font-weight: 600; color: #333; }
+        .radio-card-desc { font-size: 12px; color: #999; margin-top: 4px; }
+        .radio-card-badge {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: #fff;
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 12px;
+        }
+        
+        /* 复选标签 */
+        .tag-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tag-item {
+            background: #f8f8f8;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tag-item:hover { background: #f0f3ff; }
+        .tag-item.active { border-color: #667eea; background: #f0f3ff; color: #667eea; }
+        
+        /* 地图区域 */
+        .map-container { padding: 15px; }
+        .venue-map {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8ec);
+            border-radius: 16px;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .zone {
+            position: absolute;
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .zone:hover { transform: scale(1.05); border-color: #667eea; }
+        .zone.hot { border-color: #ff4d4f; animation: pulse 2s infinite; }
+        .zone-main {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+        .zone-a { top: 140px; left: 20px; width: 110px; height: 110px; }
+        .zone-b { top: 140px; right: 20px; width: 110px; height: 110px; }
+        .zone-meeting { bottom: 90px; left: 50%; transform: translateX(-50%); width: 110px; }
+        .zone-tea { bottom: 20px; left: 20px; width: 90px; }
+        .zone-checkin { bottom: 20px; right: 20px; width: 90px; }
+        .zone-name { font-size: 14px; font-weight: 600; display: block; }
+        .zone-status { font-size: 11px; opacity: 0.7; margin-top: 4px; display: block; }
+        .zone-icon { font-size: 28px; margin-top: 6px; display: block; }
+        
+        /* 项目卡片 */
+        .project-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .project-customer { font-size: 16px; font-weight: 600; color: #333; }
+        .project-company { font-size: 12px; color: #999; margin-top: 3px; }
+        .project-status {
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .status-pending { background: #fff2f0; color: #ff4d4f; }
+        .status-negotiating { background: #e6f7ff; color: #1890ff; }
+        .status-signed { background: #f6ffed; color: #52c41a; }
+        .project-info { margin-bottom: 12px; }
+        .project-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f5f5f5; }
+        .project-row:last-child { border-bottom: none; }
+        .project-label { color: #999; }
+        .project-value { color: #333; font-weight: 500; }
+        .project-amount { color: #ff6b6b; font-weight: 700; }
+        .project-actions { display: flex; gap: 10px; }
+        .btn-sm { flex: 1; padding: 10px; border-radius: 10px; font-size: 13px; border: none; cursor: pointer; font-weight: 500; }
+        .btn-outline { background: #f0f3ff; color: #667eea; }
+        .btn-solid { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+        
+        /* 评分 */
+        .rating-section { text-align: center; padding: 20px 0; }
+        .rating-title { font-size: 15px; color: #333; margin-bottom: 15px; }
+        .rating-stars { display: flex; justify-content: center; gap: 10px; }
+        .rating-star { font-size: 40px; color: #ddd; cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .rating-star:hover { transform: scale(1.1); }
+        .rating-star.active { color: #ffc53d; }
+        .rating-text { font-size: 14px; color: #667eea; margin-top: 10px; font-weight: 500; }
+        
+        /* 成功页 */
+        .success-page { text-align: center; padding: 40px 20px; }
+        .success-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #52c41a, #389e0d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            color: #fff;
+            margin: 0 auto 25px;
+            box-shadow: 0 8px 25px rgba(82,196,26,0.3);
+            animation: pulse 2s infinite;
+        }
+        .success-title { font-size: 26px; font-weight: 700; color: #333; }
+        .success-desc { font-size: 14px; color: #999; margin-top: 10px; }
+        
+        /* 门票 */
+        .ticket-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 30px 0;
+            border-radius: 20px;
+            padding: 30px;
+            color: #fff;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+        }
+        .ticket-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+        .ticket-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; position: relative; }
+        .ticket-info { font-size: 15px; margin-bottom: 10px; opacity: 0.9; position: relative; }
+        .ticket-qr {
+            width: 130px;
+            height: 130px;
+            background: #fff;
+            margin: 25px auto 0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 12px;
+            position: relative;
+        }
+        
+        /* 底部导航 */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            display: flex;
+            border-top: 1px solid #f0f0f0;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 100;
+        }
+        .tab-item { flex: 1; text-align: center; padding: 10px 0; cursor: pointer; transition: all 0.2s; }
+        .tab-icon { font-size: 24px; display: block; margin-bottom: 3px; }
+        .tab-text { font-size: 11px; display: block; color: #999; }
+        .tab-item.active .tab-icon { color: #667eea; }
+        .tab-item.active .tab-text { color: #667eea; font-weight: 600; }
+        
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* 提示条 */
+        .notice-bar {
+            background: #fffbe6;
+            border-left: 4px solid #faad14;
+            padding: 12px 15px;
+            margin: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <!-- 启动页 -->
-    <div id="splash-screen" class="splash-screen">
-        <div class="splash-content">
-            <div class="logo-container">
-                <div class="logo-ring"></div>
-                <div class="logo-ring"></div>
-                <div class="logo-ring"></div>
-                <div class="logo-center">
-                    <i class="fas fa-signal"></i>
+    <!-- 首页 -->
+    <div class="page home-page active" id="page-home">
+        <div class="banner">
+            <div class="banner-content">
+                <div class="banner-badge">📅 2026年4月15日</div>
+                <div class="banner-title">2026年武汉联通</div>
+                <div class="banner-subtitle">合作伙伴大会</div>
+                <div class="banner-date">📍 武汉光谷会展中心</div>
+                <div class="banner-location">携手共创 · 智赢未来</div>
+                
+                <div class="countdown">
+                    <div class="countdown-label">距离大会开幕还有</div>
+                    <div class="countdown-box">
+                        <div class="countdown-item">
+                            <div class="countdown-num" id="days">15</div>
+                            <div class="countdown-unit">天</div>
+                        </div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item">
+                            <div class="countdown-num" id="hours">08</div>
+                            <div class="countdown-unit">时</div>
+                        </div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item">
+                            <div class="countdown-num" id="minutes">32</div>
+                            <div class="countdown-unit">分</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <h1 class="splash-title">2026年武汉联通</h1>
-            <h2 class="splash-subtitle">合作伙伴大会</h2>
-            <p class="splash-tagline">智连未来 · 共创共赢</p>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
+        </div>
+
+        <div class="notice-bar">
+            <strong>🔥 热门提醒：</strong>5G专网解决方案发布会将于上午10:00举行，名额有限，请提前预约！
+        </div>
+
+        <div class="card animate-in">
+            <div class="card-header">
+                <div class="card-title">📋 大会议程</div>
+                <div class="card-more" onclick="showToast('查看完整议程')">查看全部 ></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot active"></div>
+                    <div class="timeline-time">09:00 - 09:30</div>
+                    <div class="timeline-title">开幕式暨领导致辞</div>
+                    <div class="timeline-speaker">武汉联通总经理 张总</div>
+                    <span class="timeline-tag">主会场</span>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-time">09:30 - 10:30</div>
+                    <div class="timeline-title">5G+工业互联网解决方案发布</div>
+                    <div class="timeline-speaker">技术总监 李总</div>
+                    <span class="timeline-tag">重磅发布</span>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-time">10:30 - 12:00</div>
+                    <div class="timeline-title">云网融合产品体验</div>
+                    <div class="timeline-speaker">展区A/B 自由参观</div>
+                    <span class="timeline-tag">互动体验</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-in">
+            <div class="card-header">
+                <div class="card-title">✨ 大会亮点</div>
+                <div class="card-more" onclick="goToPage('highlights')">查看全部 ></div>
+            </div>
+            
+            <div class="highlight-big" onclick="showToast('5G专网解决方案详情')">
+                <div class="highlight-big-image">
+                    📡
+                    <span class="highlight-big-tag">NEW 首发</span>
+                </div>
+                <div class="highlight-big-content">
+                    <div class="highlight-big-title">5G+工业互联网解决方案</div>
+                    <div class="highlight-big-desc">全新升级的5G专网产品，支持边缘计算、低时延、高可靠，助力制造业数字化转型</div>
+                    <div class="highlight-big-meta">
+                        <span>⏰ 09:30 发布</span>
+                        <span>📍 主会场</span>
+                        <span>👥 限300人</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-big" onclick="showToast('云网融合产品详情')">
+                <div class="highlight-big-image">
+                    ☁️
+                    <span class="highlight-big-tag">HOT 热门</span>
+                </div>
+                <div class="highlight-big-content">
+                    <div class="highlight-big-title">云网融合产品体验</div>
+                    <div class="highlight-big-desc">一站式云计算服务，弹性扩容、安全可靠，现场演示真实业务场景</div>
+                    <div class="highlight-big-meta">
+                        <span>⏰ 全天体验</span>
+                        <span>📍 展区B</span>
+                        <span>🎁 体验有礼</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-big" onclick="showToast('AI智能应用详情')">
+                <div class="highlight-big-image">
+                    🤖
+                    <span class="highlight-big-tag">AI 智能</span>
+                </div>
+                <div class="highlight-big-content">
+                    <div class="highlight-big-title">AI智能应用论坛</div>
+                    <div class="highlight-big-desc">行业专家分享AI在通信、制造、零售等领域的最新应用案例</div>
+                    <div class="highlight-big-meta">
+                        <span>⏰ 14:00 开始</span>
+                        <span>📍 分会场</span>
+                        <span>💬 互动问答</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-in">
+            <div class="card-header">
+                <div class="card-title">🎤 特邀嘉宾</div>
+                <div class="card-more">全部嘉宾 ></div>
+            </div>
+            <div class="speaker-list">
+                <div class="speaker-item" onclick="showToast('张总 - 武汉联通总经理')">
+                    <div class="speaker-avatar">👨‍💼</div>
+                    <div class="speaker-name">张总</div>
+                    <div class="speaker-title">武汉联通总经理</div>
+                </div>
+                <div class="speaker-item" onclick="showToast('李总 - 技术总监')">
+                    <div class="speaker-avatar">👩‍💻</div>
+                    <div class="speaker-name">李总</div>
+                    <div class="speaker-title">技术总监</div>
+                </div>
+                <div class="speaker-item" onclick="showToast('王总 - 产品总监')">
+                    <div class="speaker-avatar">👨‍🚀</div>
+                    <div class="speaker-name">王总</div>
+                    <div class="speaker-title">产品总监</div>
+                </div>
+                <div class="speaker-item" onclick="showToast('更多嘉宾')">
+                    <div class="speaker-avatar">➕</div>
+                    <div class="speaker-name">更多</div>
+                    <div class="speaker-title">点击查看</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-in">
+            <div class="card-header">
+                <div class="card-title">📊 参会数据</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-num" id="stat-registered">328</div>
+                    <div class="stat-label">已报名</div>
+                    <div class="stat-change">↑ 12%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" id="stat-companies">156</div>
+                    <div class="stat-label">参与企业</div>
+                    <div class="stat-change">↑ 8%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" id="stat-projects">42</div>
+                    <div class="stat-label">意向项目</div>
+                    <div class="stat-change">↑ 25%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">98%</div>
+                    <div class="stat-label">满意度</div>
+                    <div class="stat-change">↑ 3%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-in">
+            <div class="card-header">
+                <div class="card-title">🤝 合作伙伴</div>
+            </div>
+            <div class="partner-grid">
+                <div class="partner-item">🏢</div>
+                <div class="partner-item">🏭</div>
+                <div class="partner-item">🏪</div>
+                <div class="partner-item">🏥</div>
+                <div class="partner-item">🏦</div>
+                <div class="partner-item">🏫</div>
+                <div class="partner-item">🚇</div>
+                <div class="partner-item">✈️</div>
             </div>
         </div>
     </div>
 
-    <!-- 主应用容器 -->
-    <div id="app" class="app-container" style="display: none;">
-        <!-- 顶部导航 -->
-        <header class="app-header">
-            <div class="header-bg"></div>
-            <div class="header-content">
-                <div class="header-logo">
-                    <i class="fas fa-signal"></i>
-                    <span>武汉联通</span>
-                </div>
-                <h1 class="header-title">合作伙伴大会</h1>
+    <!-- 预约登记页 -->
+    <div class="page" id="page-register">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goToPage('home')">←</div>
+            <div class="nav-title">预约参会</div>
+        </div>
+        
+        <div style="padding: 20px;">
+            <div class="form-group">
+                <label class="form-label">姓名 <span class="required">*</span></label>
+                <input type="text" class="input" placeholder="请输入您的真实姓名" id="input-name">
             </div>
-        </header>
-
-        <!-- 主内容区域 -->
-        <main class="main-content">
-            <!-- 首页 -->
-            <section id="page-home" class="page active">
-                <div class="hero-section">
-                    <div class="hero-bg">
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                    </div>
-                    <div class="hero-content">
-                        <div class="date-badge">
-                            <span class="year">2026</span>
-                            <span class="month-day">04.15</span>
-                        </div>
-                        <h2 class="hero-title">智连未来<br>共创共赢</h2>
-                        <p class="hero-desc">携手共建数字化新生态</p>
-                        <button class="cta-button" onclick="navigateTo('booking')">
-                            <span>立即预约</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
+            
+            <div class="form-group">
+                <label class="form-label">公司名称 <span class="required">*</span></label>
+                <input type="text" class="input" placeholder="请输入完整公司名称" id="input-company">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">职位</label>
+                <input type="text" class="input" placeholder="如：总经理、技术总监" id="input-position">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">手机号 <span class="required">*</span></label>
+                <input type="tel" class="input" placeholder="请输入11位手机号" id="input-phone" maxlength="11">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">邮箱</label>
+                <input type="email" class="input" placeholder="用于接收会议资料" id="input-email">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">感兴趣的业务方向（可多选）</label>
+                <div class="tag-group">
+                    <span class="tag-item" onclick="toggleTag(this)">5G专网</span>
+                    <span class="tag-item" onclick="toggleTag(this)">云计算</span>
+                    <span class="tag-item" onclick="toggleTag(this)">物联网</span>
+                    <span class="tag-item" onclick="toggleTag(this)">大数据</span>
+                    <span class="tag-item" onclick="toggleTag(this)">AI智能</span>
+                    <span class="tag-item" onclick="toggleTag(this)">安全防护</span>
                 </div>
-
-                <div class="feature-grid">
-                    <div class="feature-card" onclick="navigateTo('booking')">
-                        <div class="feature-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <span class="feature-name">活动预约</span>
-                    </div>
-                    <div class="feature-card" onclick="navigateTo('venue')">
-                        <div class="feature-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <span class="feature-name">场地信息</span>
-                    </div>
-                    <div class="feature-card" onclick="navigateTo('seating')">
-                        <div class="feature-icon">
-                            <i class="fas fa-chair"></i>
-                        </div>
-                        <span class="feature-name">座位分区</span>
-                    </div>
-                    <div class="feature-card" onclick="navigateTo('projects')">
-                        <div class="feature-icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <span class="feature-name">项目跟进</span>
-                    </div>
-                    <div class="feature-card" onclick="navigateTo('review')">
-                        <div class="feature-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <span class="feature-name">活动评价</span>
-                    </div>
-                    <div class="feature-card" onclick="navigateTo('live')">
-                        <div class="feature-icon">
-                            <i class="fas fa-video"></i>
-                        </div>
-                        <span class="feature-name">直播相册</span>
-                    </div>
-                </div>
-
-                <div class="stats-section">
-                    <div class="stat-item">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">参会企业</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">合作项目</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">1000+</span>
-                        <span class="stat-label">参会人数</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 活动预约登记 -->
-            <section id="page-booking" class="page">
-                <div class="page-header">
-                    <button class="back-btn" onclick="navigateTo('home')">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2>活动预约登记</h2>
-                </div>
-                <div class="page-content">
-                    <div class="booking-form-container">
-                        <div class="form-header">
-                            <div class="form-icon">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <h3>填写预约信息</h3>
-                            <p>请如实填写以下信息，以便我们为您提供更好的服务</p>
-                        </div>
-                        <form id="booking-form" class="booking-form">
-                            <div class="form-group">
-                                <label><i class="fas fa-user"></i> 姓名</label>
-                                <input type="text" name="name" placeholder="请输入您的姓名" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-phone"></i> 联系方式</label>
-                                <input type="tel" name="phone" placeholder="请输入手机号码" required maxlength="11">
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-building"></i> 代表单位</label>
-                                <input type="text" name="company" placeholder="请输入单位名称" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-industry"></i> 所在行业</label>
-                                <select name="industry" required>
-                                    <option value="">请选择行业</option>
-                                    <option value="互联网">互联网</option>
-                                    <option value="金融">金融</option>
-                                    <option value="制造业">制造业</option>
-                                    <option value="教育">教育</option>
-                                    <option value="医疗">医疗</option>
-                                    <option value="政务">政务</option>
-                                    <option value="零售">零售</option>
-                                    <option value="物流">物流</option>
-                                    <option value="能源">能源</option>
-                                    <option value="其他">其他</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-users"></i> 同行参会人数</label>
-                                <div class="number-selector">
-                                    <button type="button" class="number-btn minus" onclick="changeNumber(-1)">-</button>
-                                    <input type="number" name="companions" value="0" min="0" max="10" readonly>
-                                    <button type="button" class="number-btn plus" onclick="changeNumber(1)">+</button>
-                                </div>
-                            </div>
-                            <button type="submit" class="submit-btn">
-                                <span>提交预约</span>
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 活动场地信息与流程 -->
-            <section id="page-venue" class="page">
-                <div class="page-header">
-                    <button class="back-btn" onclick="navigateTo('home')">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2>场地信息与流程</h2>
-                </div>
-                <div class="page-content">
-                    <!-- 场地信息 -->
-                    <div class="venue-info-card">
-                        <div class="venue-image">
-                            <div class="venue-placeholder">
-                                <i class="fas fa-building"></i>
-                                <span>武汉会议中心</span>
-                            </div>
-                        </div>
-                        <div class="venue-details">
-                            <h3><i class="fas fa-map-marked-alt"></i> 武汉会议中心黄鹤厅</h3>
-                            <div class="info-item">
-                                <i class="fas fa-location-arrow"></i>
-                                <div class="info-content">
-                                    <span class="info-label">详细地址</span>
-                                    <span class="info-value">武汉市江岸区惠济路38号</span>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-phone-alt"></i>
-                                <div class="info-content">
-                                    <span class="info-label">会场电话</span>
-                                    <span class="info-value">027-82300888</span>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-user-tie"></i>
-                                <div class="info-content">
-                                    <span class="info-label">活动负责人</span>
-                                    <span class="info-value">139XXXXXXXX</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="map-btn" onclick="openMap()">
-                            <i class="fas fa-navigation"></i>
-                            导航前往
-                        </button>
-                    </div>
-
-                    <!-- 活动流程 -->
-                    <div class="schedule-section">
-                        <h3 class="section-title">
-                            <i class="fas fa-clock"></i>
-                            活动流程
-                        </h3>
-                        <div class="timeline">
-                            <div class="timeline-item">
-                                <div class="timeline-time">9:00</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-clipboard-check"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>入场签到</h4>
-                                        <p>嘉宾签到、领取资料</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">9:25</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-play-circle"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>活动开场</h4>
-                                        <p>主持人开场致辞</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">9:30</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-microphone-alt"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>领导致辞</h4>
-                                        <p>武汉联通领导致欢迎词</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">9:45</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-comments"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>嘉宾发言</h4>
-                                        <p>行业专家分享</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">10:00</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-bullhorn"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>品牌推介</h4>
-                                        <p>联通品牌及产品介绍</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">10:30</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-handshake"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>签约仪式</h4>
-                                        <p>战略合作协议签署</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">10:45</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-camera"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>合影环节</h4>
-                                        <p>全体嘉宾合影留念</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-time">11:00</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-icon"><i class="fas fa-flag-checkered"></i></div>
-                                    <div class="timeline-text">
-                                        <h4>活动结束</h4>
-                                        <p>感谢各位嘉宾参与</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 座位分区 -->
-            <section id="page-seating" class="page">
-                <div class="page-header">
-                    <button class="back-btn" onclick="navigateTo('home')">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2>座位分区</h2>
-                </div>
-                <div class="page-content">
-                    <!-- 座位分布图 -->
-                    <div class="seating-map-section">
-                        <h3 class="section-title">
-                            <i class="fas fa-th"></i>
-                            座位分布图
-                        </h3>
-                        <div class="seating-map">
-                            <div class="stage">
-                                <i class="fas fa-tv"></i>
-                                <span>舞台</span>
-                            </div>
-                            <div class="seat-zones">
-                                <div class="zone vip-zone">
-                                    <span class="zone-label">VIP区</span>
-                                    <div class="seat-grid">
-                                        <div class="seat-row">
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                        </div>
-                                        <div class="seat-row">
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                            <span class="seat vip"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="zone a-zone">
-                                    <span class="zone-label">A区</span>
-                                    <div class="seat-grid">
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="zone b-zone">
-                                    <span class="zone-label">B区</span>
-                                    <div class="seat-grid">
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="zone c-zone">
-                                    <span class="zone-label">C区</span>
-                                    <div class="seat-grid">
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                        <div class="seat-row">
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                            <span class="seat"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="legend">
-                                <div class="legend-item">
-                                    <span class="legend-color vip"></span>
-                                    <span>VIP座位</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-color regular"></span>
-                                    <span>普通座位</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-color occupied"></span>
-                                    <span>已预约</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 展位列表 -->
-                    <div class="booth-section">
-                        <h3 class="section-title">
-                            <i class="fas fa-store"></i>
-                            合作伙伴展位
-                        </h3>
-                        <div class="booth-list" id="booth-list">
-                            <!-- 动态生成 -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 项目跟进 -->
-            <section id="page-projects" class="page">
-                <div class="page-header">
-                    <button class="back-btn" onclick="navigateTo('home')">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2>合作项目跟进</h2>
-                </div>
-                <div class="page-content">
-                    <div class="projects-summary">
-                        <div class="summary-card">
-                            <span class="summary-number">12</span>
-                            <span class="summary-label">进行中项目</span>
-                        </div>
-                        <div class="summary-card">
-                            <span class="summary-number">8</span>
-                            <span class="summary-label">已完成项目</span>
-                        </div>
-                        <div class="summary-card">
-                            <span class="summary-number">5</span>
-                            <span class="summary-label">待启动项目</span>
-                        </div>
-                    </div>
-                    <div class="projects-list" id="projects-list">
-                        <!-- 动态生成 -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- 活动评价 -->
-            <section id="page-review" class="page">
-                <div class="page-header">
-                    <button class="back-btn" onclick="navigateTo('home')">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2>活动评价</h2>
-                </div>
-                <div class="page-content">
-                    <div class="review-container">
-                        <div class="review-header">
-                            <div class="thank-you-icon">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <h3>感谢您参加2026武汉联通合作伙伴大会</h3>
-                            <p>您的反馈对我们非常重要</p>
-                        </div>
-
-                        <form id="review-form" class="review-form">
-                            <!-- 整体满意度 -->
-                            <div class="rating-section">
-                                <label class="rating-label">活动整体满意度</label>
-                                <div class="star-rating" data-rating="0">
-                                    <i class="far fa-star" data-value="1"></i>
-                                    <i class="far fa-star" data-value="2"></i>
-                                    <i class="far fa-star" data-value="3"></i>
-                                    <i class="far fa-star" data-value="4"></i>
-                                    <i class="far fa-star" data-value="5"></i>
-                                </div>
-                            </div>
-
-                            <!-- 单项评分 -->
-                            <div class="rating-categories">
-                                <div class="category-rating">
-                                    <span class="category-name">活动组织</span>
-                                    <div class="category-stars" data-category="organization">
-                                        <i class="far fa-star" data-value="1"></i>
-                                        <i class="far fa-star" data-value="2"></i>
-                                        <i class="far fa-star" data-value="3"></i>
-                                        <i class="far fa-star" data-value="4"></i>
-                                        <i class="far fa-star" data-value="5"></i>
-                                    </div>
-                                </div>
-                                <div class="category-rating">
-                                    <span class="category-name">活动服务</span>
-                                    <div class="category-stars" data-category="service">
-                                        <i class="far fa-star" data-value="1"></i>
-                                        <i class="far fa-star" data-value="2"></i>
-                                        <i class="far fa-star" data-value="3"></i>
-                                        <i class="far fa-star" data-value="4"></i>
-                                        <i class="far fa-star" data-value="5"></i>
-                                    </div>
-                                </div>
-                                <div class="category-rating">
-                                    <span class="category-name">会场氛围</span>
-                                    <div class="category-stars" data-category="atmosphere">
-                                        <i class="far fa-star" data-value="1"></i>
-                                        <i class="far fa-star" data-value="2"></i>
-                                        <i class="far fa-star" data-value="3"></i>
-                                        <i class="far fa-star" data-value="4"></i>
-                                        <i class="far fa-star" data-value="5"></i>
-                                    </div>
-                                </div>
-                                <div class="category-rating">
-                                    <span class="category-name">活动内容</span>
-                                    <div class="category-stars" data-category="content">
-                                        <i class="far fa-star" data-value="1"></i>
-                                        <i class="far fa-star" data-value="2"></i>
-                                        <i class="far fa-star" data-value="3"></i>
-                                        <i class="far fa-star" data-value="4"></i>
-                                        <i class="far fa-star" data-value="5"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 评价内容 -->
-                            <div class="form-group">
-                                <label>您的评价</label>
-                                <textarea name="comment" placeholder="请输入您的宝贵意见（限100字）" maxlength="100" rows="4"></textarea>
-                                <span class="char-count">0/100</span>
-                            </div>
-
-                            <button type="submit" class="submit-btn">
-                                <span>提交评价</span>
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 直播与云相册 -->
-            <section id="page-live" class="page">
-                <div class="page-header">
-                    <button class="back-btn" onclick="navigateTo('home')">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2>直播与云相册</h2>
-                </div>
-                <div class="page-content">
-                    <!-- 直播区域 -->
-                    <div class="live-section">
-                        <h3 class="section-title">
-                            <i class="fas fa-broadcast-tower"></i>
-                            活动直播
-                        </h3>
-                        <div class="live-player">
-                            <div class="live-badge">
-                                <span class="live-dot"></span>
-                                <span>LIVE</span>
-                            </div>
-                            <div class="player-placeholder">
-                                <i class="fas fa-play-circle"></i>
-                                <span>点击观看直播</span>
-                            </div>
-                        </div>
-                        <div class="live-stats">
-                            <span><i class="fas fa-eye"></i> 1,234 人观看</span>
-                            <span><i class="fas fa-heart"></i> 856 点赞</span>
-                        </div>
-                    </div>
-
-                    <!-- 云相册 -->
-                    <div class="gallery-section">
-                        <h3 class="section-title">
-                            <i class="fas fa-images"></i>
-                            云相册
-                        </h3>
-                        <div class="gallery-grid" id="gallery-grid">
-                            <!-- 动态生成 -->
-                        </div>
-                        <button class="load-more-btn" onclick="loadMorePhotos()">
-                            <i class="fas fa-sync-alt"></i>
-                            加载更多
-                        </button>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- 底部导航 -->
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active" onclick="navigateTo('home')">
-                <i class="fas fa-home"></i>
-                <span>首页</span>
-            </a>
-            <a href="#" class="nav-item" onclick="navigateTo('booking')">
-                <i class="fas fa-calendar-check"></i>
-                <span>预约</span>
-            </a>
-            <a href="#" class="nav-item" onclick="navigateTo('live')">
-                <i class="fas fa-video"></i>
-                <span>直播</span>
-            </a>
-            <a href="#" class="nav-item" onclick="navigateTo('review')">
-                <i class="fas fa-star"></i>
-                <span>评价</span>
-            </a>
-        </nav>
+            </div>
+            
+            <div style="background: #f6ffed; border-left: 4px solid #52c41a; padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 20px;">
+                <strong style="color: #52c41a;">✓ 预约须知</strong><br>
+                <span style="font-size: 13px; color: #666;">提交后将生成电子门票，请保存好二维码，现场签到时使用</span>
+            </div>
+            
+            <button class="btn-primary" onclick="submitRegister()">立即预约</button>
+        </div>
     </div>
 
-    <!-- 提示消息 -->
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toast-message">操作成功</span>
+    <!-- 会场导览页 -->
+    <div class="page" id="page-venue">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goToPage('home')">←</div>
+            <div class="nav-title">会场导览</div>
+        </div>
+        
+        <div style="padding: 15px;">
+            <!-- 高级平面布局图 - 鲜艳配色风格 -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(102,126,234,0.3);">
+                
+                <!-- 主会场 - 顶部大区域 - 鲜艳紫色 -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); border: 3px solid #fff; border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 20px; cursor: pointer; position: relative; box-shadow: 0 8px 20px rgba(255,107,107,0.4);" onclick="showToast('主会场：开幕式、主题演讲、产品发布')">
+                    <div style="position: absolute; top: 10px; left: 15px; background: #fff; color: #ff6b6b; font-size: 11px; padding: 5px 12px; border-radius: 15px; font-weight: 700;">主舞台</div>
+                    <div style="font-size: 40px; margin-bottom: 8px;">🎤</div>
+                    <div style="font-size: 18px; font-weight: 700; color: #fff;">主会场</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 4px;">开幕式 · 主题演讲</div>
+                </div>
+                
+                <!-- 中间展区区域 -->
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <!-- 展区A - 鲜艳绿色 -->
+                    <div style="flex: 1; background: linear-gradient(135deg, #00d2d3 0%, #01a3a4 100%); border: 3px solid #fff; border-radius: 16px; padding: 25px; text-align: center; cursor: pointer; position: relative; box-shadow: 0 8px 20px rgba(0,210,211,0.4);" onclick="showToast('展区A：5G专网、边缘计算、工业互联网')">
+                        <div style="position: absolute; top: 10px; right: 10px; font-size: 24px;">📡</div>
+                        <div style="font-size: 32px; margin-bottom: 8px; font-weight: 700; color: #fff;">5G</div>
+                        <div style="font-size: 15px; font-weight: 700; color: #fff;">展区 A</div>
+                        <div style="font-size: 11px; color: rgba(255,255,255,0.9); margin-top: 4px;">专网 · 边缘计算</div>
+                    </div>
+                    
+                    <!-- 展区B - 鲜艳蓝色 -->
+                    <div style="flex: 1; background: linear-gradient(135deg, #3742fa 0%, #2f3542 100%); border: 3px solid #fff; border-radius: 16px; padding: 25px; text-align: center; cursor: pointer; position: relative; box-shadow: 0 8px 20px rgba(55,66,250,0.4);" onclick="showToast('展区B：云计算、大数据、AI智能')">
+                        <div style="position: absolute; top: 10px; right: 10px; font-size: 24px;">☁️</div>
+                        <div style="font-size: 32px; margin-bottom: 8px; font-weight: 700; color: #fff;">AI</div>
+                        <div style="font-size: 15px; font-weight: 700; color: #fff;">展区 B</div>
+                        <div style="font-size: 11px; color: rgba(255,255,255,0.9); margin-top: 4px;">云计算 · 大数据</div>
+                    </div>
+                </div>
+                
+                <!-- 洽谈区 - 中间长条 - 鲜艳橙色 -->
+                <div style="background: linear-gradient(135deg, #ffa502 0%, #ff7f50 100%); border: 3px solid #fff; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px; cursor: pointer; position: relative; box-shadow: 0 8px 20px rgba(255,165,2,0.4);" onclick="showToast('商务洽谈区：私密洽谈，需提前预约')">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                        <div style="font-size: 32px;">💼</div>
+                        <div style="text-align: left;">
+                            <div style="font-size: 16px; font-weight: 700; color: #fff;">商务洽谈区</div>
+                            <div style="font-size: 12px; color: rgba(255,255,255,0.9);">一对一洽谈 · 签约</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 底部服务区域 -->
+                <div style="display: flex; gap: 15px;">
+                    <!-- 签到处 - 鲜艳粉色 -->
+                    <div style="flex: 1; background: linear-gradient(135deg, #ff9ff3 0%, #f368e0 100%); border: 3px solid #fff; border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; box-shadow: 0 8px 20px rgba(255,159,243,0.4);" onclick="showToast('签到处：签到、领取资料')">
+                        <div style="font-size: 28px; margin-bottom: 6px;">📝</div>
+                        <div style="font-size: 14px; font-weight: 700; color: #fff;">签到处</div>
+                    </div>
+                    
+                    <!-- 茶歇区 - 鲜艳青色 -->
+                    <div style="flex: 1; background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%); border: 3px solid #fff; border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; box-shadow: 0 8px 20px rgba(72,219,251,0.4);" onclick="showToast('茶歇区：休息、交流')">
+                        <div style="font-size: 28px; margin-bottom: 6px;">☕</div>
+                        <div style="font-size: 14px; font-weight: 700; color: #fff;">茶歇区</div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- 图例说明 - 更新配色 -->
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 6px; background: #fff; padding: 8px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #ff6b6b, #ee5a24); border-radius: 4px;"></div>
+                    <span style="font-size: 12px; color: #333; font-weight: 600;">主会场</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; background: #fff; padding: 8px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #00d2d3, #01a3a4); border-radius: 4px;"></div>
+                    <span style="font-size: 12px; color: #333; font-weight: 600;">展区</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; background: #fff; padding: 8px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #ffa502, #ff7f50); border-radius: 4px;"></div>
+                    <span style="font-size: 12px; color: #333; font-weight: 600;">洽谈区</span>
+                </div>
+                <div style="display: flex; align-items: gap: 6px; background: #fff; padding: 8px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #ff9ff3, #f368e0); border-radius: 4px;"></div>
+                    <span style="font-size: 12px; color: #333; font-weight: 600;">服务</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">📍 区域介绍</div>
+            </div>
+            <div style="font-size: 14px; color: #666; line-height: 1.8;">
+                <p><strong>主会场：</strong>可容纳300人，配备LED大屏、专业音响</p>
+                <p style="margin-top: 10px;"><strong>展区A：</strong>5G专网、边缘计算、工业互联网展示</p>
+                <p style="margin-top: 10px;"><strong>展区B：</strong>云计算、大数据、AI智能解决方案</p>
+                <p style="margin-top: 10px;"><strong>洽谈区：</strong>私密商务洽谈，需提前预约</p>
+            </div>
+        </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- 项目跟进页 -->
+    <div class="page" id="page-projects">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goToPage('home')">←</div>
+            <div class="nav-title">项目跟进</div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); margin: 15px; border-radius: 16px; padding: 20px; color: #fff;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div style="font-size: 16px; font-weight: 600;">项目跟进概览</div>
+                <div style="font-size: 13px; opacity: 0.9;">2026年4月 ▼</div>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700;">42</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">总商机</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700;">12</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">本月新增</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700;">8</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">已成交</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700;">580万</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">成交金额</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; background: #fff; padding: 10px; margin: 0 15px 15px; border-radius: 10px; overflow-x: auto;">
+            <span style="flex-shrink: 0; padding: 8px 15px; font-size: 13px; background: #667eea; color: #fff; border-radius: 15px; margin-right: 10px;">全部(42)</span>
+            <span style="flex-shrink: 0; padding: 8px 15px; font-size: 13px; color: #666; border-radius: 15px; margin-right: 10px;">待跟进(15)</span>
+            <span style="flex-shrink: 0; padding: 8px 15px; font-size: 13px; color: #666; border-radius: 15px; margin-right: 10px;">洽谈中(18)</span>
+            <span style="flex-shrink: 0; padding: 8px 15px; font-size: 13px; color: #666; border-radius: 15px;">已签约(8)</span>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <div>
+                    <div class="project-customer">张总</div>
+                    <div class="project-company">华为技术（武汉）有限公司</div>
+                </div>
+                <span class="project-status status-negotiating">洽谈中</span>
+            </div>
+            <div class="project-info">
+                <div class="project-row">
+                    <span class="project-label">意向产品</span>
+                    <span class="project-value">5G专网解决方案</span>
+                </div>
+                <div class="project-row">
+                    <span class="project-label">预计金额</span>
+                    <span class="project-value project-amount">¥120万</span>
+                </div>
+                <div class="project-row">
+                    <span class="project-label">跟进人</span>
+                    <span class="project-value">李明</span>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn-sm btn-outline" onclick="showToast('快速跟进')">快速跟进</button>
+                <button class="btn-sm btn-solid" onclick="showToast('拨打电话')">电话联系</button>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <div>
+                    <div class="project-customer">王经理</div>
+                    <div class="project-company">东风汽车集团股份有限公司</div>
+                </div>
+                <span class="project-status status-negotiating">洽谈中</span>
+            </div>
+            <div class="project-info">
+                <div class="project-row">
+                    <span class="project-label">意向产品</span>
+                    <span class="project-value">云计算服务</span>
+                </div>
+                <div class="project-row">
+                    <span class="project-label">预计金额</span>
+                    <span class="project-value project-amount">¥80万</span>
+                </div>
+                <div class="project-row">
+                    <span class="project-label">跟进人</span>
+                    <span class="project-value">张伟</span>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn-sm btn-outline" onclick="showToast('快速跟进')">快速跟进</button>
+                <button class="btn-sm btn-solid" onclick="showToast('拨打电话')">电话联系</button>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <div>
+                    <div class="project-customer">陈总</div>
+                    <div class="project-company">良品铺子股份有限公司</div>
+                </div>
+                <span class="project-status status-signed">已签约</span>
+            </div>
+            <div class="project-info">
+                <div class="project-row">
+                    <span class="project-label">意向产品</span>
+                    <span class="project-value">物联网平台</span>
+                </div>
+                <div class="project-row">
+                    <span class="project-label">签约金额</span>
+                    <span class="project-value project-amount">¥45万</span>
+                </div>
+                <div class="project-row">
+                    <span class="project-label">跟进人</span>
+                    <span class="project-value">王芳</span>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn-sm btn-outline" onclick="showToast('查看详情')">查看详情</button>
+                <button class="btn-sm btn-solid" onclick="showToast('合同管理')">合同管理</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 活动评价页 -->
+    <div class="page" id="page-feedback">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goToPage('home')">←</div>
+            <div class="nav-title">活动评价</div>
+        </div>
+        
+        <div style="padding: 20px;">
+            <div class="rating-section">
+                <div class="rating-title">您对本次活动的整体满意度</div>
+                <div class="rating-stars">
+                    <span class="rating-star" onclick="setRating(1)">★</span>
+                    <span class="rating-star" onclick="setRating(2)">★</span>
+                    <span class="rating-star" onclick="setRating(3)">★</span>
+                    <span class="rating-star" onclick="setRating(4)">★</span>
+                    <span class="rating-star" onclick="setRating(5)">★</span>
+                </div>
+                <div class="rating-text" id="rating-text">请点击星星评分</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title" style="margin-bottom: 15px;">分项评价</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <span style="font-size: 14px; color: #333;">📋 议程安排</span>
+                    <div style="display: flex; gap: 5px;">
+                        <span style="font-size: 20px; color: #ffc53d;">★★★★★</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <span style="font-size: 14px; color: #333;">🎤 演讲内容</span>
+                    <div style="display: flex; gap: 5px;">
+                        <span style="font-size: 20px; color: #ffc53d;">★★★★★</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;">
+                    <span style="font-size: 14px; color: #333;">🏢 展区体验</span>
+                    <div style="display: flex; gap: 5px;">
+                        <span style="font-size: 20px; color: #ffc53d;">★★★★☆</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+                    <span style="font-size: 14px; color: #333;">🍽️ 茶歇餐饮</span>
+                    <div style="display: flex; gap: 5px;">
+                        <span style="font-size: 20px; color: #ffc53d;">★★★★☆</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title" style="margin-bottom: 15px;">最感兴趣的业务方向</div>
+                <div class="tag-group">
+                    <span class="tag-item active" onclick="toggleTag(this)">5G专网</span>
+                    <span class="tag-item" onclick="toggleTag(this)">云计算</span>
+                    <span class="tag-item active" onclick="toggleTag(this)">物联网</span>
+                    <span class="tag-item" onclick="toggleTag(this)">大数据</span>
+                    <span class="tag-item" onclick="toggleTag(this)">AI智能</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title" style="margin-bottom: 15px;">意见建议（选填）</div>
+                <textarea class="textarea" placeholder="您对本次活动有什么建议？我们期待听到您的声音..."></textarea>
+            </div>
+            
+            <button class="btn-primary" onclick="submitFeedback()">提交评价</button>
+        </div>
+    </div>
+
+    <!-- 预约成功页 -->
+    <div class="page" id="page-success">
+        <div class="success-page">
+            <div class="success-icon">✓</div>
+            <div class="success-title">预约成功！</div>
+            <div class="success-desc">您的电子门票已生成，请妥善保存</div>
+            
+            <div class="ticket-card">
+                <div class="ticket-title">🎫 2026武汉联通合作伙伴大会</div>
+                <div class="ticket-info">👤 姓名：张三</div>
+                <div class="ticket-info">🏢 公司：示例科技有限公司</div>
+                <div class="ticket-info">⏰ 场次：全天场 09:00-17:00</div>
+                <div class="ticket-info">📍 地点：武汉光谷会展中心A馆</div>
+                <div class="ticket-qr">
+                    <div style="text-align: center;">
+                        <div style="font-size: 60px;">▣</div>
+                        <div style="font-size: 11px; margin-top: 5px;">扫码签到</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #e6f7ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
+                <strong style="color: #1890ff;">💡 温馨提示</strong><br>
+                <span style="font-size: 13px; color: #666;">• 请提前30分钟到场签到<br>• 携带名片参加商务洽谈<br>• 现场提供免费停车位</span>
+            </div>
+            
+            <button class="btn-primary" onclick="goToPage('home')">返回首页</button>
+        </div>
+    </div>
+
+    <!-- 大会亮点页 -->
+    <div class="page" id="page-highlights">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goToPage('home')">←</div>
+            <div class="nav-title">大会亮点</div>
+        </div>
+        
+        <div style="padding: 15px;">
+            <div class="card">
+                <div class="card-title">🎉 重磅发布</div>
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; margin-bottom: 15px;">
+                    <div style="font-size: 18px; font-weight: 700; margin-bottom: 10px;">5G+工业互联网解决方案</div>
+                    <div style="font-size: 13px; opacity: 0.9; line-height: 1.6;">
+                        全新升级的5G专网产品，支持边缘计算、低时延、高可靠，助力企业数字化转型
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 10px; font-size: 11px;">NEW</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 10px; font-size: 11px; margin-left: 8px;">首发</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">🌟 精彩议程</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot active"></div>
+                        <div class="timeline-time">09:00 - 09:30</div>
+                        <div class="timeline-title">开幕式暨领导致辞</div>
+                        <div class="timeline-speaker">武汉联通总经理 张总</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">09:30 - 10:30</div>
+                        <div class="timeline-title">5G+工业互联网解决方案发布</div>
+                        <div class="timeline-speaker">技术总监 李总</div>
+                        <span class="timeline-tag">重磅发布</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">10:30 - 12:00</div>
+                        <div class="timeline-title">云网融合产品体验</div>
+                        <div class="timeline-speaker">展区A/B 自由参观</div>
+                        <span class="timeline-tag">互动体验</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">14:00 - 15:30</div>
+                        <div class="timeline-title">AI智能应用论坛</div>
+                        <div class="timeline-speaker">行业专家分享</div>
+                        <span class="timeline-tag">深度交流</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">15:30 - 17:00</div>
+                        <div class="timeline-title">商务洽谈 & 签约仪式</div>
+                        <div class="timeline-speaker">VIP客户专场</div>
+                        <span class="timeline-tag">预约制</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">🎁 参会福利</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                    <div style="background: #f6ffed; border-radius: 10px; padding: 15px; text-align: center;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">📚</div>
+                        <div style="font-size: 13px; font-weight: 600; color: #333;">全套资料</div>
+                        <div style="font-size: 11px; color: #999; margin-top: 4px;">白皮书+案例集</div>
+                    </div>
+                    <div style="background: #e6f7ff; border-radius: 10px; padding: 15px; text-align: center;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">🍽️</div>
+                        <div style="font-size: 13px; font-weight: 600; color: #333;">精美茶歇</div>
+                        <div style="font-size: 11px; color: #999; margin-top: 4px;">中西式自助餐</div>
+                    </div>
+                    <div style="background: #fff2f0; border-radius: 10px; padding: 15px; text-align: center;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">🎲</div>
+                        <div style="font-size: 13px; font-weight: 600; color: #333;">幸运抽奖</div>
+                        <div style="font-size: 11px; color: #999; margin-top: 4px;">5G手机等你拿</div>
+                    </div>
+                    <div style="background: #f9f0ff; border-radius: 10px; padding: 15px; text-align: center;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">💼</div>
+                        <div style="font-size: 13px; font-weight: 600; color: #333;">商务对接</div>
+                        <div style="font-size: 11px; color: #999; margin-top: 4px;">一对一洽谈</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 直播链接页 -->
+    <div class="page" id="page-live">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goToPage('home')">←</div>
+            <div class="nav-title">大会直播</div>
+        </div>
+        
+        <div style="padding: 15px;">
+            <div class="card" style="text-align: center; padding: 30px;">
+                <div style="font-size: 60px; margin-bottom: 15px;">📺</div>
+                <div style="font-size: 20px; font-weight: 700; color: #333; margin-bottom: 10px;">2026武汉联通合作伙伴大会</div>
+                <div style="font-size: 14px; color: #666; margin-bottom: 20px;">现场直播 · 云端共享</div>
+                
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; margin-bottom: 20px;">
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">直播时间</div>
+                    <div style="font-size: 22px; font-weight: 700;">2026年4月15日</div>
+                    <div style="font-size: 16px; margin-top: 5px;">09:00 - 17:00</div>
+                </div>
+                
+                <div style="background: #f6ffed; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: left;">
+                    <div style="font-size: 14px; font-weight: 600; color: #52c41a; margin-bottom: 10px;">✅ 直播内容</div>
+                    <div style="font-size: 13px; color: #666; line-height: 1.8;">
+                        • 开幕式暨领导致辞<br>
+                        • 5G+工业互联网解决方案发布<br>
+                        • 云网融合产品展示<br>
+                        • AI智能应用论坛<br>
+                        • 商务洽谈实况
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="showToast('直播链接将在活动当天开放')">🔔 预约直播提醒</button>
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #f0f0f0;">
+                    <div style="font-size: 13px; color: #999; margin-bottom: 12px;">分享直播间</div>
+                    <div style="display: flex; justify-content: center; gap: 15px;">
+                        <div style="width: 40px; height: 40px; background: #07c160; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer;">💬</div>
+                        <div style="width: 40px; height: 40px; background: #fa9d3b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer;">📱</div>
+                        <div style="width: 40px; height: 40px; background: #0088ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer;">🔗</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">📋 直播须知</div>
+                <div style="font-size: 13px; color: #666; line-height: 1.8;">
+                    <p>1. 直播将于活动当天 08:50 开始预热</p>
+                    <p style="margin-top: 8px;">2. 支持手机、电脑、平板多端观看</p>
+                    <p style="margin-top: 8px;">3. 直播过程中可实时提问互动</p>
+                    <p style="margin-top: 8px;">4. 回放视频将在活动结束后24小时内上线</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="tab-bar" id="tab-bar">
+        <div class="tab-item active" onclick="goToPage('home')">
+            <span class="tab-icon">🏠</span>
+            <span class="tab-text">首页</span>
+        </div>
+        <div class="tab-item" onclick="goToPage('highlights')">
+            <span class="tab-icon">✨</span>
+            <span class="tab-text">亮点</span>
+        </div>
+        <div class="tab-item" onclick="goToPage('projects')">
+            <span class="tab-icon">📊</span>
+            <span class="tab-text">跟进</span>
+        </div>
+        <div class="tab-item" onclick="goToPage('venue')">
+            <span class="tab-icon">🗺️</span>
+            <span class="tab-text">导览</span>
+        </div>
+        <div class="tab-item" onclick="goToPage('register')">
+            <span class="tab-icon">📝</span>
+            <span class="tab-text">预约</span>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div id="toast" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 1000;"></div>
+
+    <script>
+        // 页面切换
+        function goToPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            
+            document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            
+            const tabBar = document.getElementById('tab-bar');
+            const tabPages = ['home', 'highlights', 'projects', 'venue', 'register'];
+            if (tabPages.includes(page)) {
+                tabBar.style.display = 'flex';
+                const tabIndex = tabPages.indexOf(page);
+                document.querySelectorAll('.tab-item')[tabIndex].classList.add('active');
+            } else {
+                tabBar.style.display = 'none';
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        // 倒计时
+        function updateCountdown() {
+            const targetDate = new Date('2026-04-15 09:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            }
+        }
+        setInterval(updateCountdown, 60000);
+        updateCountdown();
+
+        // 数字增长动画
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                el.textContent = Math.floor(current);
+            }, 30);
+        }
+        
+        // 页面加载时执行动画
+        setTimeout(() => {
+            animateNumber('stat-registered', 328);
+            animateNumber('stat-companies', 156);
+            animateNumber('stat-projects', 42);
+        }, 500);
+
+        // 表单交互
+        function selectSession(el, value) {
+            document.querySelectorAll('.radio-card').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function toggleTag(el) {
+            el.classList.toggle('active');
+        }
+
+        function submitRegister() {
+            const name = document.getElementById('input-name').value;
+            const company = document.getElementById('input-company').value;
+            const phone = document.getElementById('input-phone').value;
+            
+            if (!name || !company || !phone) {
+                showToast('请填写必填项');
+                return;
+            }
+            
+            showToast('提交成功！');
+            setTimeout(() => goToPage('success'), 1000);
+        }
+
+        // 评分
+        const ratingTexts = ['', '非常不满意', '不满意', '一般', '满意', '非常满意'];
+        function setRating(value) {
+            const stars = document.querySelectorAll('.rating-star');
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+            document.getElementById('rating-text').textContent = ratingTexts[value];
+        }
+
+        function submitFeedback() {
+            showToast('评价提交成功！感谢您的反馈');
+            setTimeout(() => goToPage('home'), 1500);
+        }
+
+        // 区域详情
+        function showZoneDetail(name, status, capacity) {
+            showToast(`${name}\n状态：${status}\n${capacity || ''}`);
+        }
+
+        // Toast 提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2000);
+        }
+    </script>
 </body>
 </html>
